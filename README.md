@@ -1,8 +1,8 @@
 # Drip API Wrapper - PHP
 
-An object-oriented PHP wrapper for Drip's REST API v2.0
+This is a fork of the PHP library found [here](https://github.com/DripEmail/drip-php).
 
-[![Build Status](https://travis-ci.org/DripEmail/drip-php.svg?branch=master)](https://travis-ci.org/DripEmail/drip-php)
+An object-oriented PHP wrapper for Drip's REST API v2.0
 
 ## Installation
 
@@ -32,5 +32,3 @@ the "list accounts" endpoint.
 ## PHP version support
 
 We attempt to support versions of PHP that are supported upstream: http://php.net/supported-versions.php
-
-For the actual supported list, see `.travis.yml`.

@@ -1,7 +1,7 @@
 {
-  "name": "dripemail/drip-php",
+  "name": "aramboyajyan/drip-php-enhanced",
   "description": "An object-oriented PHP wrapper for Drip's REST API v2.0",
-  "homepage": "https://github.com/DripEmail/drip-php",
+  "homepage": "https://github.com/aramboyajyan/drip-php-enhanced",
   "license": "MIT",
   "autoload": {
     "psr-4": { "Drip\\": "src" }
