@@ -56,7 +56,8 @@ class Client {
    *               * `guzzle_stack_constructor` (for test suite, may break at
    *   any time, do not use)
    *
-   * @throws Exception
+   * @throws \Drip\Exception\InvalidAccountIdException
+   * @throws \Drip\Exception\InvalidApiTokenException
    */
   public function __construct($api_token, $account_id, $options = []) {
     if (\array_key_exists('api_end_point', $options)) {
@@ -88,6 +89,8 @@ class Client {
    * @param array $params Set of arguments
    *                          - status (optional)
    *
+   * @throws \Drip\Exception\InvalidArgumentException
+   *
    * @return \Drip\ResponseInterface
    */
   public function get_campaigns($params) {
@@ -105,6 +108,8 @@ class Client {
    *
    * @param array $params Set of arguments
    *                          - campaign_id (required)
+   *
+   * @throws \Drip\Exception\InvalidArgumentException
    *
    * @return \Drip\ResponseInterface
    */
@@ -168,6 +173,8 @@ class Client {
    *
    * @param array $params
    *
+   * @throws \Drip\Exception\InvalidArgumentException
+   *
    * @return \Drip\ResponseInterface
    */
   public function fetch_subscriber($params) {
@@ -194,6 +201,10 @@ class Client {
    * Subscribes a user to a given campaign for a given account.
    *
    * @param array $params
+   *
+   * @throws \Drip\Exception\InvalidArgumentException
+   *
+   * @return \Drip\ResponseInterface
    */
   public function subscribe_subscriber($params) {
     if (empty($params['campaign_id'])) {
@@ -218,11 +229,14 @@ class Client {
   }
 
   /**
-   *
    * Some keys are removed from the params so they don't get send with the
    * other data to Drip.
    *
    * @param array $params
+   *
+   * @throws \Drip\Exception\InvalidArgumentException
+   *
+   * @return \Drip\ResponseInterface
    */
   public function unsubscribe_subscriber($params) {
     if (!empty($params['subscriber_id'])) {
@@ -244,12 +258,13 @@ class Client {
   }
 
   /**
-   *
    * This calls POST /:account_id/tags to add the tag. It just returns some
    * status code no content
    *
-   * @param array $params
-   * @param bool $status
+   * @param $email
+   * @param $tags
+   *
+   * @return \Drip\ResponseInterface
    */
   public function tag_subscriber($email, $tags) {
     $req_params = [
@@ -266,34 +281,35 @@ class Client {
   }
 
   /**
-   *
-   * This calls DELETE /:account_id/tags to remove the tags. It just returns
+   * This calls DELETE /:account_id/tags to remove a single tag. It just returns
    * some status code no content
    *
-   * @param array $params
-   * @param bool $status success or failure
+   * @param $email
+   * @param $tag
+   *
+   * @return \Drip\ResponseInterface
    */
-  public function untag_subscriber($email, $tags) {
+  public function untag_subscriber($email, $tag) {
     $req_params = [
-      'tags' => [],
+      'tags' => [
+        [
+          'email' => $email,
+          'tag' => $tag,
+        ],
+      ],
     ];
-    foreach ($tags as $tag) {
-      $req_params['tags'][] = [
-        'email' => $email,
-        'tag' => $tag,
-      ];
-    }
 
     return $this->make_request("$this->account_id/tags", $req_params, self::DELETE);
   }
 
   /**
-   *
    * This calls DELETE /:account_id/subscribers/:id_or_email to delete a
    * subscriber.
    *
    * @param array $params
-   * @param bool $status success or failure
+   *
+   * @return \Drip\ResponseInterface
+   * @throws \Drip\Exception\InvalidArgumentException
    */
   public function delete_subscriber($params) {
     if (!empty($params['subscriber_id'])) {
@@ -315,11 +331,14 @@ class Client {
   }
 
   /**
-   *
    * Posts an event specified by the user.
    *
    * @param array $params
    * @param bool
+   *
+   * @throws \Drip\Exception\InvalidArgumentException
+   *
+   * @return \Drip\ResponseInterface
    */
   public function record_event($params) {
     if (empty($params['action'])) {
