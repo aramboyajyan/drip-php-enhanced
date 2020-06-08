@@ -498,6 +498,10 @@ class Client {
         // @codeCoverageIgnoreStart
       case self::PUT:
         // @codeCoverageIgnoreEnd
+        if (isset($params['query'])) {
+          $req_params['query'] = $params['query'];
+          unset($params['query']);
+        }
         $req_params['body'] = is_array($params) ? json_encode($params) : $params;
         break;
       default:
